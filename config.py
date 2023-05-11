@@ -2,12 +2,17 @@ import pickle
 from time import sleep
 import hashlib
 import os
+from pathlib import Path
+from tkinter import filedialog
+
+#DICCIONARIS DE CONFIGURACIO DE USUARIS
 
 #Diccionari model d'usuari
 user = {
     "username": "",
     "passwd": "",
-    "move_folders": []
+    "orign_move_folders": [],
+    "destination_move_folders": []
     
 }
 
@@ -23,6 +28,8 @@ move_folders_destination = {
 }
 
 ######################################################################
+
+#INTERFICIE EN TERMINAL | VISTA DE L'USUARI
 
 #funcio per netejar la terminal independentment del SO
 def clear():
@@ -45,19 +52,23 @@ def create_user():
 
     creation_title(new_user)
 
-    #os.system('cls' if os.name == 'nt' else 'clear')
     sleep(2)
     new_user["username"] = input("Nom de l'usuari: ")
-    
+    clear()
 
     creation_title(new_user)
 
     sleep(2)
     new_user["passwd"] = encryption_hash()
-    os.system('cls' if os.name == 'nt' else 'clear')
+    clear()
+
+    create_origin_folder(new_user) if input("Vols crear ara una carpeta d'origen? (S/N) ").lower() == "s" else print()
+    create_destination_folder(new_user) if input("Vols crear ara una carpeta de destinació? (S/N) ").lower() == "s"  else print()
 
 ####################################################################
-    
+
+#LOGICA DE CONFIGURACIO
+
 #Funcio de encriptacio hash per a guardar i verificar les contrasenyes de forma segura
 def encryption_hash():
 
@@ -78,7 +89,28 @@ def encryption_hash():
     return result
 
 def create_origin_folder(new_user):
-    new_user["move_folders"]
+    
+    #Crea una copia del diccionari model per a les carpetes d'origen
+    new_origin_folder = move_folders_origin.copy()
+    
+    #Agafa la ruta absoluta de forma grafica 
+    directory_path = filedialog.askdirectory()
+
+    new_origin_folder["origin_folder"] = directory_path
+
+    #Afegim a la llista 
+    new_user["orign_move_folders"].append(new_origin_folder)
+
+
+def create_destination_folder(new_user):
+    new_destination_folder = move_folders_destination.copy()
+
+    directory_path = filedialog.askdirectory()
+
+    new_destination_folder["destination_folder"] = directory_path
+
+    new_user["destination_move_folders"].append(new_destination_folder)
+
 
 if __name__ == "__main__":
     create_user()
