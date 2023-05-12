@@ -4,6 +4,7 @@ import hashlib
 import os
 from pathlib import Path
 from tkinter import filedialog
+import readchar
 
 #DICCIONARIS DE CONFIGURACIO DE USUARIS
 
@@ -19,12 +20,15 @@ user = {
 #Diccionaris para el organitzador d'archius
 move_folders_origin = {
 
-        "origin_folder": ""
+    "name_folder": "",
+    "origin_folder": ""
 }
 
 move_folders_destination = {
 
-        "destination_folder": ""
+    "name_folder": "",
+    "destination_folder": "",
+    "type_of_file": []
 }
 
 ######################################################################
@@ -65,6 +69,8 @@ def create_user():
     create_origin_folder(new_user) if input("Vols crear ara una carpeta d'origen? (S/N) ").lower() == "s" else print()
     create_destination_folder(new_user) if input("Vols crear ara una carpeta de destinació? (S/N) ").lower() == "s"  else print()
 
+    print(new_user)
+
 ####################################################################
 
 #LOGICA DE CONFIGURACIO
@@ -98,12 +104,33 @@ def create_origin_folder(new_user):
 
     new_origin_folder["origin_folder"] = directory_path
 
+    #Preguntem el nom per a poder tindre un identificador
+    new_origin_folder["name_folder"] = input("Introdueix el nom de la carpeta: ")
+    
     #Afegim a la llista 
     new_user["orign_move_folders"].append(new_origin_folder)
 
 
+def type_of_file(new_destination_folder):
+    print(""""Tria un tipus de fitxer o crea un nou
+    1. PDF
+    2. Imatges (JPG,JPEG, PNG)
+    3. Archius comprimits (RAR, ZIP, 7Z, TAR.GZ)
+    4. Executables (EXE)
+    5. Personalitzat""")
+
+    option_choosed = readchar.readchar().decode()
+
+    if option_choosed == "1":
+        #new_destination_folder["type_of_file"] = dont know if append w/ for or smthng else
+        pass
+
+
+
 def create_destination_folder(new_user):
     new_destination_folder = move_folders_destination.copy()
+
+    #new_destination_folder["type_of_file"].append(type_of_file(new_destination_folder))
 
     directory_path = filedialog.askdirectory()
 
