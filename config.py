@@ -111,6 +111,11 @@ def create_origin_folder(new_user):
     new_user["orign_move_folders"].append(new_origin_folder)
 
 
+def append_files_destination_folder(file_list, new_destination_folder):
+    for file in file_list:
+        new_destination_folder["type_of_file"].append(file)
+
+
 def type_of_file(new_destination_folder):
     print(""""Tria un tipus de fitxer o crea un nou
     1. PDF
@@ -122,8 +127,32 @@ def type_of_file(new_destination_folder):
     option_choosed = readchar.readchar().decode()
 
     if option_choosed == "1":
-        #new_destination_folder["type_of_file"] = dont know if append w/ for or smthng else
-        pass
+        new_destination_folder["type_of_file"].append(".pdf") 
+    
+    elif option_choosed == "2":
+        file_list = [".jpg", ".jpeg", ".png"]
+        append_files_destination_folder(file_list, new_destination_folder)
+
+    elif option_choosed == "3":
+        file_list = [".rar", ".zip", ".7z", ".tar.gz"]
+        append_files_destination_folder(file_list, new_destination_folder)
+
+    elif option_choosed == "4":
+        new_destination_folder["type_of_file"].append(".exe")
+    
+    elif option_choosed == "5":
+        
+        file_list = []
+        user_input = input("Introdueix la extensio: ")
+        file_list.append(".{}".format(user_input))
+        
+        while user_input != "q":
+
+            user_input = input("Introdueix la extensio (q per sortir) : ")
+            file_list.append(".{}".format(user_input))
+
+        
+
 
 
 
