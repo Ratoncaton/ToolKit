@@ -1,4 +1,4 @@
-import pickle
+import json
 from time import sleep
 import hashlib
 import os
@@ -58,13 +58,7 @@ def create_user():
     creation_title(new_user)
 
     sleep(1)
-    possible_username = input("Nom de l'usuari: ")
-
-    no_matches = 0
-
-    for username in user["username"]:
-        if username != possible_username:
-            no_matches += 1
+    new_user["username"] = input("Nom de l'usuari: ")
             
     clear()
 
@@ -86,12 +80,15 @@ def create_user():
         
         creation_destination_folder_finnish = False
         
-        while not create_destination_folder:
+        while not creation_destination_folder_finnish:
             create_destination_folder(new_user)
             creation_destination_folder_finnish = True if input("Introduir una altra carpeta de destinacio? (S/N) ").lower() == "n" else print(end="")
 
     clear()
     new_user["auto_login"] = True if input("Iniciar sessio a aquest usuari al iniciar el programa? (S/N) ").lower() == "s" else print(end="")
+
+    with open ("config.json", "w") as config:
+        json.dump(new_user, config)
 
     
 
