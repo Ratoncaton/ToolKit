@@ -115,8 +115,20 @@ def encryption_hash():
     result = hash_code.hexdigest()
     return result
 
+#Funcio per extraure usuaris de l'arxiu JSON
+def extract_users():
+    try:
+        with open("config.json", "r") as config:
+         return json.load(config)
+    except FileNotFoundError:
+        print("No existeixen usuaris...")
+        sleep(1)
+        print("Dirigint-te a la configuracio de usuaris")
+        sleep(1)
+        create_user()
+
+#Crea una carpeta d'origen, des d'aquesta carpeta shutil revisara i moura carpetes
 def create_origin_folder(new_user):
-    
     clear()
     print(""" 
 -- CONFIGURACIO CARPETA DE ORIGEN --
@@ -137,12 +149,12 @@ def create_origin_folder(new_user):
     new_user["origin_move_folders"].append(new_origin_folder)
 
 
-
+#Facilita escritura per afegir tipus d'arxius
 def append_files_destination_folder(file_list, new_destination_folder):
     for file in file_list:
         new_destination_folder["type_of_file"].append(file)
 
-
+#Tipus d'arxius que s'agafaran 
 def type_of_file(new_destination_folder):
     
     #titol
@@ -223,6 +235,7 @@ Has introduit un parametre incorrectament""")
               
         sleep(2)
 
+#Crea la carpeta de desti
 def create_destination_folder(new_user):
 
     clear()
