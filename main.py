@@ -5,8 +5,12 @@ import config
 
 actual_user = {}
 
+users = config.extract_users()
+print(users)
+
 def choose_actual_user():
-    pass
+    print("Quin usuari vols triar?")
+    print("")
 
 def menu():
     print("""" 

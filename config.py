@@ -1,4 +1,5 @@
 import json
+import pickle
 from time import sleep
 import hashlib
 import os
@@ -8,8 +9,10 @@ import readchar
 
 #DICCIONARIS DE CONFIGURACIO DE USUARIS
 
+users = []
+
 #Diccionari model d'usuari
-user = {
+user_structure = {
     "username": "",
     "passwd": "",
     "auto_login": False,
@@ -51,44 +54,49 @@ def creation_title(new_user):
 
 #Funcio per a crear usuaris 
 def create_user():
-    
+    finnish = False
+    while not finnish:
     #Es copia el diccionari model per a poder tenir mes de un usuari
-    new_user = user.copy()
+        new_user = user_structure.copy()
 
-    creation_title(new_user)
+        creation_title(new_user)
 
-    sleep(1)
-    new_user["username"] = input("Nom de l'usuari: ")
+        sleep(1)
+        new_user["username"] = input("Nom de l'usuari: ")
+                
+        clear()
+
+        creation_title(new_user)
+
+        sleep(1)
+        new_user["passwd"] = encryption_hash()
+        clear()
+
+        if input("Vols crear ara una carpeta d'origen? (S/N) ").lower() == "s":
             
-    clear()
+            creation_origin_folder_finnish = False
+            
+            while not creation_origin_folder_finnish:
+                create_origin_folder(new_user)
+                creation_origin_folder_finnish = True if input("Introduir una altra carpeta d'origen? (S/N) ").lower() == "n" else print(end="")
 
-    creation_title(new_user)
+        if input("Vols crear ara una carpeta de destinacio? (S/N) ").lower() == "s":
+            
+            creation_destination_folder_finnish = False
+            
+            while not creation_destination_folder_finnish:
+                create_destination_folder(new_user)
+                creation_destination_folder_finnish = True if input("Introduir una altra carpeta de destinacio? (S/N) ").lower() == "n" else print(end="")
 
-    sleep(1)
-    new_user["passwd"] = encryption_hash()
-    clear()
+        clear()
+        new_user["auto_login"] = True if input("Iniciar sessio a aquest usuari al iniciar el programa? (S/N) ").lower() == "s" else print(end="")
 
-    if input("Vols crear ara una carpeta d'origen? (S/N) ").lower() == "s":
-        
-        creation_origin_folder_finnish = False
-        
-        while not creation_origin_folder_finnish:
-            create_origin_folder(new_user)
-            creation_origin_folder_finnish = True if input("Introduir una altra carpeta d'origen? (S/N) ").lower() == "n" else print(end="")
+        users.append(new_user)
 
-    if input("Vols crear ara una carpeta de destinacio? (S/N) ").lower() == "s":
-        
-        creation_destination_folder_finnish = False
-        
-        while not creation_destination_folder_finnish:
-            create_destination_folder(new_user)
-            creation_destination_folder_finnish = True if input("Introduir una altra carpeta de destinacio? (S/N) ").lower() == "n" else print(end="")
+        finnish = True if input("Vols introduir un altre usuari? (S/N)  ").lower() == "s" else print(end="")
 
-    clear()
-    new_user["auto_login"] = True if input("Iniciar sessio a aquest usuari al iniciar el programa? (S/N) ").lower() == "s" else print(end="")
-
-    with open ("config.json", "w") as config:
-        json.dump(new_user, config)
+    with open ("config.txt", "wb") as config:
+        json.dump(users , config)
 
     
 
