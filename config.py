@@ -96,7 +96,7 @@ def create_user():
         finnish = True if input("Vols introduir un altre usuari? (S/N)  ").lower() == "s" else print(end="")
 
     with open ("config.txt", "wb") as config:
-        json.dump(users , config)
+        pickle.dump(users , config)
 
     
 
@@ -126,8 +126,8 @@ def encryption_hash():
 #Funcio per extraure usuaris de l'arxiu JSON
 def extract_users():
     try:
-        with open("config.json", "r") as config:
-         return json.load(config)
+        with open("config.txt", "rb") as config:
+         return pickle.load(config)
     except FileNotFoundError:
         print("No existeixen usuaris...")
         sleep(1)
