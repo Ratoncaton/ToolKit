@@ -56,7 +56,10 @@ def creation_title(new_user):
 def create_user():
     finnish = False
     while not finnish:
-    #Es copia el diccionari model per a poder tenir mes de un usuari
+        
+        clear()
+        
+        #Es copia el diccionari model per a poder tenir mes de un usuari
         new_user = user_structure.copy()
 
         creation_title(new_user)
@@ -91,12 +94,27 @@ def create_user():
         clear()
         new_user["auto_login"] = True if input("Iniciar sessio a aquest usuari al iniciar el programa? (S/N) ").lower() == "s" else print(end="")
 
+        print(users)
+        input("enter: ")
         users.append(new_user)
+        print(users)
+        input("enter: ")
 
-        finnish = True if input("Vols introduir un altre usuari? (S/N)  ").lower() == "s" else print(end="")
+        finnish = True if input("Vols introduir un altre usuari? (S/N)  ").lower() == "n" else print(end="")
+    
 
-    with open ("config.txt", "wb") as config:
-        pickle.dump(users , config)
+    if os.path.exists("config.txt"):
+        with open ("config.txt", "wb") as config:
+            print(users)
+            input("enter: ")
+            pickle.dump(users, config)
+            return users
+    
+    else:
+        with open ("config.txt", "wb") as config:
+            pickle.dump(users , config)
+            return users
+
 
     
 
@@ -123,17 +141,28 @@ def encryption_hash():
     result = hash_code.hexdigest()
     return result
 
+
+def add_user():
+
+    users = extract_users()
+    print(users)
+    input("enter: ")
+    create_user()
+
+
 #Funcio per extraure usuaris de l'arxiu JSON
 def extract_users():
     try:
+        
         with open("config.txt", "rb") as config:
          return pickle.load(config)
+    
     except FileNotFoundError:
         print("No existeixen usuaris...")
         sleep(1)
         print("Dirigint-te a la configuracio de usuaris")
         sleep(1)
-        create_user()
+        return create_user()
 
 #Crea una carpeta d'origen, des d'aquesta carpeta shutil revisara i moura carpetes
 def create_origin_folder(new_user):
