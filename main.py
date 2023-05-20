@@ -3,7 +3,8 @@ import readchar
 import config
 from time import sleep
 import os
-
+import pyshorteners
+import subprocess
 
 def choose_actual_user(users):
     
@@ -68,6 +69,7 @@ Has introduit un usuari inexistent""")
         print("Contrasenya incorrecta")
         sleep(1)
 
+
 #Moure fitxers
 def move_files(actual_user):
     
@@ -93,10 +95,83 @@ def move_files(actual_user):
                         shutil.move(path_file, destination_folder["destination_folder"])
 
 
+def link_shorter():
+    
+    config.clear()
+    #S'introdueix el link 
+    link = input("Introdueix el link: ")
+    
+    #Comanda acortada per facilitar lectura
+    shortener = pyshorteners.Shortener()
+
+    #Acortador del link
+    #Si s'intenta ficar un link ja acortat salta l'error pertinent
+    try:
+        link_shorted = shortener.tinyurl.short(link)
+    
+
+        user_choice = input("Vols mostrar el link en pantalla (1) o guardar-lo en un archiu .txt (2)? \n")
+            
+        finnish = False
+        while not finnish:
+            if user_choice == "1":
+                    
+                config.clear()
+                    
+                    #Es mostra el link per pantalla
+                print(link_shorted)
+                print()
+
+                input("Prem ENTER per a continuar... ")
+                finnish = True
+                
+            elif user_choice == "2":
+
+                    #Es guarda el link en un archiu .txt en la carpeta
+                with open ("links_shorted.txt", "a") as file:
+                    file.write("\n{} = {}".format(link, link_shorted))
+                    
+                finnish = True
+                
+            else:
+                    #Missatge d'error
+                print("            ¡ ERROR ! ")
+                print("Has escollit un parametre inexistent")
+
+    except pyshorteners.exceptions.ShorteningErrorException:
+        print("                  ¡ ERROR !")
+        print("Es veu que has intentant acortar un link ja acortat...")
+        sleep(2)
+
+def cache_cleaner():
+    
+    if os.name == 'nt':
+        try:
+            subprocess.run("cleanmgr /sagerun:1", shell=True)
+            print("Cache netejada correctament")
+            print()
+            input("Prem ENTER per continuar... ")
+        except Exception as error:
+            print("Error: {error}")
+    
+    else:
+        try:
+            subprocess.run("sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches", shell=True)
+            
+            print("Cache netejada correctament")
+            print()
+            input("Prem ENTER per continuar... ")
+        
+        except Exception as error:
+            print("Error: {error}")
+
 
 def menu(actual_user):
+    
     finnish = False
     while not finnish:
+        config.clear()
+
         print("""" 
       $$$$$$$$\                  $$\ $$\   $$\ $$\   $$\     
       \__$$  __|                 $$ |$$ | $$  |\__|  $$ |    
@@ -132,12 +207,12 @@ Usuari: {}
         elif user_choice == "2":
             
             pass
-            #link_shorter()
+            link_shorter()
         
         elif user_choice == "3":
             
             pass
-            #cache_cleaner()
+            cache_cleaner()
     
         elif user_choice == "4":
 
@@ -158,8 +233,6 @@ Usuari: {}
             return True
 
 
-
-
 def main():
     finnish = False
     print("Extraent usuaris...")
@@ -173,6 +246,7 @@ def main():
         
         #Finalment, s'envia al menu on podran triar les diferentes opcions
         finnish = menu(actual_user)
+
 
 if __name__ == "__main__":
     main()
