@@ -5,6 +5,8 @@ from time import sleep
 import os
 import pyshorteners
 import subprocess
+import secrets
+import string
 
 def choose_actual_user(users):
     
@@ -145,17 +147,26 @@ def link_shorter():
 
 def cache_cleaner():
     
+    #Si el SO es Windows
     if os.name == 'nt':
         try:
+            #Comanda per rentar la cache
             subprocess.run("cleanmgr /sagerun:1", shell=True)
+
             print("Cache netejada correctament")
             print()
             input("Prem ENTER per continuar... ")
+
         except Exception as error:
+            #Missatge d'error amb l'error corresponent
             print("Error: {error}")
+            sleep(3)
     
+    #Si no es Windows, es Linux. Mac no existeix
     else:
         try:
+
+            #Comanda per rentar la cache
             subprocess.run("sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches", shell=True)
             
             print("Cache netejada correctament")
@@ -164,6 +175,69 @@ def cache_cleaner():
         
         except Exception as error:
             print("Error: {error}")
+    
+
+
+def passwd_gen():
+    
+    #Variable per saber quin tipus de contrasenyes ficar
+    alphabet = ""
+
+    finnish = False
+    while not finnish:
+        
+        config.clear()
+
+        print("------ GENERADOR DE CONTRASENYES ------")
+        
+        try:
+            passwd_length = int(input("\nLongitud de la contrasenya: "))
+            finnish = True
+        
+        #Per si l'usuari introdueix algo que no es un numero
+        except ValueError:
+            print()
+            print("          ¡ ERROR !")
+            print("No has introduit un nombre valid")
+            sleep(2)
+
+    if input("Majuscules (S/N): ").lower() == "s":
+        alphabet += string.ascii_uppercase
+    
+    if input("Minuscules (S/N): ").lower() == "s":
+        alphabet += string.ascii_lowercase
+
+    if input("Digits (S/N): ").lower() == "s":
+        alphabet += string.digits
+
+    if input("Caracters especials (S/N): ").lower() == "s":
+        alphabet += string.punctuation
+
+    #Si hi ha algun tipus de caracter es pot crear la contrasenya
+    if alphabet != "":
+
+        password = ""
+        
+        for character in range(passwd_length):
+            password += "".join(secrets.choice(alphabet))
+        
+        config.clear()
+
+        print("------ GENERADOR DE CONTRASENYES ------")
+
+        print("\nContrasenya: {}".format(password))
+
+        input("\nPrem ENTER per continuar")
+    
+    #Si no ha ficat ningun tipus de caracter, no es pot crear la contrasenya
+    else:
+        print()
+        print("                         ¡ ERROR !")
+        print("No es pot crear ninguna contrasenya cap tipus de caracters")
+        sleep(2)
+
+    
+
 
 
 def menu(actual_user):
@@ -172,7 +246,7 @@ def menu(actual_user):
     while not finnish:
         config.clear()
 
-        print("""" 
+        print(""" 
       $$$$$$$$\                  $$\ $$\   $$\ $$\   $$\     
       \__$$  __|                 $$ |$$ | $$  |\__|  $$ |    
          $$ | $$$$$$\   $$$$$$\  $$ |$$ |$$  / $$\ $$$$$$\   
@@ -201,23 +275,20 @@ Usuari: {}
 
         if user_choice == "1":
             
-            pass
             move_files(actual_user)
         
         elif user_choice == "2":
-            
-            pass
+        
             link_shorter()
         
         elif user_choice == "3":
             
-            pass
             cache_cleaner()
     
         elif user_choice == "4":
 
             pass
-            #passwd_gen()
+            passwd_gen()
         
         elif user_choice == "5":
 
@@ -226,7 +297,7 @@ Usuari: {}
 
         elif user_choice == "6":
 
-            pass
+            finnish = True
 
         elif user_choice == "7":
             finnish = True
