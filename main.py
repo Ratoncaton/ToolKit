@@ -7,6 +7,7 @@ import pyshorteners
 import subprocess
 import secrets
 import string
+import boveda
 
 def choose_actual_user(users):
     
@@ -227,7 +228,8 @@ def passwd_gen():
 
         print("\nContrasenya: {}".format(password))
 
-        input("\nPrem ENTER per continuar")
+        if input("Vols guardar la contrasenyar? (S/N): ").lower() == "s":
+            boveda.password_generated_data(password)
     
     #Si no ha ficat ningun tipus de caracter, no es pot crear la contrasenya
     else:
@@ -236,8 +238,48 @@ def passwd_gen():
         print("No es pot crear ninguna contrasenya cap tipus de caracters")
         sleep(2)
 
-    
 
+def password_trunk(actual_user):
+    finnish = False
+    
+    while not finnish:
+        config.clear()
+
+        print("""
+------ LA BOVEDA ------ 
+1. Afegir contrasenyes
+2. Consultar contrasenyes
+3. Sortir al menu principal""")
+
+        user_choice = readchar.readchar()
+
+        if user_choice == "1":
+            
+            password_actual_user = config.encryption_hash()
+            
+            if password_actual_user ==  actual_user["passwd"]:
+                boveda.generate_data()     
+
+            else:
+                print("Contrasenya incorrecta")
+                sleep(2)
+        
+        elif user_choice == "2":
+            password_actual_user = config.encryption_hash()
+            
+            if password_actual_user ==  actual_user["passwd"]:
+                boveda.boveda_main(True)     
+
+            else:
+                print("Contrasenya incorrecta")
+                sleep(2)
+        
+        elif user_choice == "3":
+            finnish = True
+        
+        else:
+            print("            ¡ ERROR !")
+            print("Has introduit un parametre inexistent")
 
 
 def menu(actual_user):
@@ -266,7 +308,7 @@ Usuari: {}
 2. Acortador de links
 3. Netejar Cache
 4. Generador de contrasenyes
-5. Guardar contrasenyes
+5. La boveda
 6. Canviar usuari
 7. Tancar programa
     """.format(actual_user["username"]))
@@ -291,9 +333,8 @@ Usuari: {}
             passwd_gen()
         
         elif user_choice == "5":
-
-            pass
-            #password_trunk()
+            
+            password_trunk(actual_user)
 
         elif user_choice == "6":
 
@@ -317,7 +358,6 @@ def main():
         
         #Finalment, s'envia al menu on podran triar les diferentes opcions
         finnish = menu(actual_user)
-
 
 if __name__ == "__main__":
     main()
