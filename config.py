@@ -60,10 +60,33 @@ def create_user():
     #Es copia el diccionari model per a poder tenir mes de un usuari
         new_user = user_structure.copy()
 
-        creation_title(new_user)
+        #variable per a mes endavant
+        username_confirmation = False
 
-        sleep(1)
-        new_user["username"] = input("Nom de l'usuari: ")
+        while not username_confirmation:
+            clear()
+            creation_title(new_user)
+
+            sleep(1)
+            new_user["username"] = input("Nom de l'usuari: ")
+
+            #Si es el primer usuari no es necessari confirmar res
+            if len(users) == 0:
+                username_confirmation = True
+
+            else:
+                for user in users:
+                    #Si el username del usuari es igual que el de un altre, pot causar confusions, per tants surt un error
+                    if user["username"] == new_user["username"]:
+
+                        new_user["username"] = ""
+
+                        print("       ¡ ERROR !")
+                        print("Aquest usuari ja existeix")
+                        sleep(2)
+                    
+                    else:
+                        username_confirmation = True
                 
         clear()
 
