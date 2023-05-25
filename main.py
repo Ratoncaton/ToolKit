@@ -1,3 +1,5 @@
+#Made By Walid El Ourfi El Orfi | 25/05/2023 | 1 SMX MP14 Python
+
 import shutil
 import readchar
 import config
@@ -96,6 +98,12 @@ def move_files(actual_user):
 
                         #Es mou l'arxiu
                         shutil.move(path_file, destination_folder["destination_folder"])
+    
+    config.clear()
+
+    print("Archius moguts amb exit")
+    print()
+    input("Prem ENTER per continuar... ")
 
 
 def link_shorter():
@@ -166,10 +174,13 @@ def cache_cleaner():
     #Si no es Windows, es Linux. Mac no existeix
     else:
         try:
+            config.clear()
+            #Renta la cache
+            limp="sudo sh -c 'sync && echo 3 > /proc/sys/vm/drop_caches'"
 
-            #Comanda per rentar la cache
-            subprocess.run("sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches", shell=True)
+            process = subprocess.Popen(limp, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             
+            sleep(10)
             print("Cache netejada correctament")
             print()
             input("Prem ENTER per continuar... ")
@@ -316,8 +327,15 @@ Usuari: {}
         user_choice = readchar.readchar()
 
         if user_choice == "1":
+            if len(actual_user["origin_move_folders"]) == 0 or len(actual_user["destination_move_folders"]) == 0:
+                
+                config.clear()
+                print("               ¡ ERROR !")
+                print("No tens ninguna carpeta configurada")
+                sleep(2)
             
-            move_files(actual_user)
+            else:
+                move_files(actual_user)
         
         elif user_choice == "2":
         

@@ -1,3 +1,5 @@
+#Made By Walid El Ourfi El Orfi | 25/05/2023 | 1 SMX MP14 Python
+
 from cryptography.fernet import Fernet
 import config
 import json

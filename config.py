@@ -1,3 +1,5 @@
+#Made By Walid El Ourfi El Orfi | 25/05/2023 | 1 SMX MP14 Python
+
 import pickle
 from time import sleep
 import hashlib
@@ -45,6 +47,7 @@ def clear():
 def creation_title(new_user):
     
     clear()
+    
     print("----- CONFIGURACIO DE USUARI -----")
 
     print("Usuari: {}".format(new_user["username"]))
@@ -115,7 +118,7 @@ def create_user():
                 creation_destination_folder_finnish = True if input("Introduir una altra carpeta de destinacio? (S/N) ").lower() == "n" else print(end="")
         
         clear()
-        new_user["auto_login"] = True if input("Iniciar sessio a aquest usuari al iniciar el programa? (S/N) ").lower() == "s" else print(end="")
+        new_user["auto_login"] = True if input("Inicia sessio sense posar la contrasenya? (S/N) ").lower() == "s" else print(end="")
 
         users.append(new_user)
 
